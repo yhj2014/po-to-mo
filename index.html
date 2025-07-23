@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PO 转 MO 在线转换工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: #2575fc;
+            border-color: #2575fc;
+        }
+        .btn-primary:hover {
+            background-color: #1a68e0;
+            border-color: #1a68e0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            text-align: center;
+            color: #6c757d;
+        }
+        .file-input-label {
+            cursor: pointer;
+            padding: 1rem;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .file-input-label:hover {
+            border-color: #2575fc;
+            background-color: rgba(37, 117, 252, 0.05);
+        }
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        #dropArea {
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .drag-over {
+            border-color: #2575fc !important;
+            background-color: rgba(37, 117, 252, 0.1) !important;
+        }
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-width: 0.2em;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: #2575fc;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center">
+        <div class="container">
+            <h1><i class="bi bi-translate"></i> PO 转 MO 在线转换工具</h1>
+            <p class="lead">快速将 .po 文件转换为 .mo 文件，无需服务器，完全在浏览器中完成</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        文件转换
+                    </div>
+                    <div class="card-body">
+                        <div id="dropArea" class="file-input-label">
+                            <i class="bi bi-cloud-arrow-up" style="font-size: 2rem;"></i>
+                            <p class="mb-1">拖放 PO 文件到这里，或点击选择文件</p>
+                            <p class="small text-muted">支持 .po 文件格式</p>
+                            <input type="file" id="fileInput" accept=".po" style="display: none;">
+                            <div id="fileName" class="file-name"></div>
+                        </div>
+                        <div class="d-grid mt-3">
+                            <button id="convertBtn" class="btn btn-primary" disabled>
+                                <span id="convertText">转换为 MO 文件</span>
+                                <span id="convertSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h5>隐私保护</h5>
+                        <p>所有转换都在浏览器中完成，文件不会上传到任何服务器，保障您的数据安全。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h5>快速转换</h5>
+                        <p>无需等待服务器处理，直接在本地完成转换，速度更快，体验更流畅。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="bi bi-device-ssd"></i>
+                        </div>
+                        <h5>无需安装</h5>
+                        <p>无需安装任何软件，打开浏览器即可使用，支持所有现代浏览器。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p class="mb-0">© 2023 PO 转 MO 在线工具 | 开源项目 <a href="https://github.com/yourusername/po2mo-online" target="_blank" class="text-decoration-none">GitHub</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbinary@1.0.0/jsBinary.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pofile@1.1.1/dist/pofile.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/msgpack-lite@0.1.26/dist/msgpack.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const dropArea = document.getElementById('dropArea');
+            const fileName = document.getElementById('fileName');
+            const convertBtn = document.getElementById('convertBtn');
+            const convertText = document.getElementById('convertText');
+            const convertSpinner = document.getElementById('convertSpinner');
+            let selectedFile = null;
+
+            // 点击区域触发文件选择
+            dropArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // 文件选择变化
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            // 拖放功能
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropArea.classList.add('drag-over');
+            }
+
+            function unhighlight() {
+                dropArea.classList.remove('drag-over');
+            }
+
+            dropArea.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                if (dt.files.length > 0) {
+                    handleFile(dt.files[0]);
+                }
+            });
+
+            // 处理选择的文件
+            function handleFile(file) {
+                if (!file.name.endsWith('.po')) {
+                    alert('请选择 .po 文件');
+                    return;
+                }
+
+                selectedFile = file;
+                fileName.textContent = `已选择: ${file.name}`;
+                convertBtn.disabled = false;
+            }
+
+            // 转换按钮点击事件
+            convertBtn.addEventListener('click', function() {
+                if (!selectedFile) return;
+
+                convertText.textContent = '转换中...';
+                convertSpinner.style.display = 'inline-block';
+                convertBtn.disabled = true;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const poContent = e.target.result;
+                        const po = PO.parse(poContent);
+                        const mo = convertPoToMo(po);
+                        
+                        // 创建下载链接
+                        const blob = new Blob([mo], { type: 'application/octet-stream' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = selectedFile.name.replace('.po', '.mo');
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        // 重置状态
+                        convertText.textContent = '转换为 MO 文件';
+                        convertSpinner.style.display = 'none';
+                        convertBtn.disabled = false;
+                    } catch (error) {
+                        alert('转换失败: ' + error.message);
+                        console.error(error);
+                        convertText.textContent = '转换为 MO 文件';
+                        convertSpinner.style.display = 'none';
+                        convertBtn.disabled = false;
+                    }
+                };
+                reader.readAsText(selectedFile);
+            });
+
+            // PO 转 MO 函数
+            function convertPoToMo(po) {
+                // 创建 MO 文件头部
+                const moHeader = {
+                    magic: 0x950412de,
+                    revision: 0,
+                    numStrings: Object.keys(po.translations['']).length,
+                    origTableOffset: 28,
+                    transTableOffset: 28 + (Object.keys(po.translations['']).length * 8,
+                    hashTableSize: 0,
+                    hashTableOffset: 0
+                };
+
+                // 准备字符串表
+                const strings = [];
+                const offsets = [];
+                let offset = 0;
+
+                // 添加原始字符串和翻译字符串
+                for (const [msgid, msgstr] of Object.entries(po.translations[''])) {
+                    if (msgid === '') continue; // 跳过头部
+
+                    // 原始字符串 (msgid)
+                    const idBuf = new TextEncoder().encode(msgid + '\0');
+                    strings.push(idBuf);
+                    offsets.push({ origOffset: offset, origLength: msgid.length });
+                    offset += idBuf.byteLength;
+
+                    // 翻译字符串 (msgstr)
+                    const strBuf = new TextEncoder().encode(msgstr.msgstr[0] + '\0');
+                    strings.push(strBuf);
+                    offsets.push({ transOffset: offset, transLength: msgstr.msgstr[0].length });
+                    offset += strBuf.byteLength;
+                }
+
+                // 创建二进制写入器
+                const buffer = new ArrayBuffer(
+                    28 + // 头部
+                    moHeader.numStrings * 8 + // 原始字符串表
+                    moHeader.numStrings * 8 + // 翻译字符串表
+                    offset // 字符串数据
+                );
+
+                const view = new DataView(buffer);
+                let pos = 0;
+
+                // 写入头部
+                view.setUint32(pos, moHeader.magic, true); pos += 4;
+                view.setUint32(pos, moHeader.revision, true); pos += 4;
+                view.setUint32(pos, moHeader.numStrings, true); pos += 4;
+                view.setUint32(pos, moHeader.origTableOffset, true); pos += 4;
+                view.setUint32(pos, moHeader.transTableOffset, true); pos += 4;
+                view.setUint32(pos, moHeader.hashTableSize, true); pos += 4;
+                view.setUint32(pos, moHeader.hashTableOffset, true); pos += 4;
+
+                // 写入原始字符串表
+                let stringDataOffset = 28 + moHeader.numStrings * 16;
+                for (let i = 0; i < moHeader.numStrings; i++) {
+                    view.setUint32(pos, offsets[i*2].origLength, true); pos += 4;
+                    view.setUint32(pos, stringDataOffset + offsets[i*2].origOffset, true); pos += 4;
+                }
+
+                // 写入翻译字符串表
+                for (let i = 0; i < moHeader.numStrings; i++) {
+                    view.setUint32(pos, offsets[i*2+1].transLength, true); pos += 4;
+                    view.setUint32(pos, stringDataOffset + offsets[i*2+1].transOffset, true); pos += 4;
+                }
+
+                // 写入字符串数据
+                const uint8Array = new Uint8Array(buffer);
+                let dataPos = stringDataOffset;
+                for (const str of strings) {
+                    uint8Array.set(str, dataPos);
+                    dataPos += str.byteLength;
+                }
+
+                return buffer;
+            }
+        });
+    </script>
+</body>
+</html>
